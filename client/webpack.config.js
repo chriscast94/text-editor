@@ -19,21 +19,50 @@ module.exports = () => {
     },
     plugins: [
       new HtmlWebpackPlugin({
-        title: 'Caching Images! 🖼',
+        title: 'JATE',
         template: './index.html',
       }),
+      //injects custom service worker
       new InjectManifest({
-        swSrc: './src/sw.js',
-        swDest: 'sw.js',
+        swSrc: './src-sw.js',
+        swDest: 'src-sw.js',
+      }),
+      new WebpackPwaManifest({
+        name: 'Just Another Text Editor',
+        short_name: 'J.A.T.E.',
+        description: 'Take notes with javascript highlighting!',
+        background_color: '#225ca3',
+        theme_color: '#225ca3',
+        start_url: '/',
+        publicPath: '/',
+        icons: [
+          {
+            src: path.resolve('src/images/logo.png'),
+            sizes: [96, 128, 192, 256, 384, 512],
+            destination: path.join('assets', 'icons'),
+          },
+        ],
       }),
     ],
 
     module: {
       rules: [
+        //css loader
         {
           test: /\.css$/,
           use: ['style-loader', 'css-loader'],
         },
+        //babel
+        {
+          test: /\.m?js$/,
+          exclude: /(node_modules|bower_components)/,
+          use: {
+            loader: 'babel-loader',
+            options: {
+              presets: ['@babel/preset-env']
+            }
+          }
+        }
       ],
     },
   };
