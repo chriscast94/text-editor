@@ -7,24 +7,36 @@ const { precacheAndRoute } = require('workbox-precaching/precacheAndRoute');
 
 precacheAndRoute(self.__WB_MANIFEST);
 
-const pageCache = new CacheFirst({
-  cacheName: 'page-cache',
-  plugins: [
-    new CacheableResponsePlugin({
-      statuses: [0, 200],
-    }),
-    new ExpirationPlugin({
-      maxAgeSeconds: 30 * 24 * 60 * 60,
-    }),
-  ],
-});
+const pageCache = new CacheFirst(
+  console.log('pageCache load line 11'),
+  {
+    cacheName: 'page-cache',
+    plugins: [
+      new CacheableResponsePlugin({
+        statuses: [0, 200],
+      }),
+      new ExpirationPlugin({
+        // 30 Days
+        maxAgeSeconds: 30 * 24 * 60 * 60,
+      }),
+    ],
+  });
 
-warmStrategyCache({
-  urls: ['/index.html', '/'],
-  strategy: pageCache,
-});
+warmStrategyCache(
+  console.log('Hitting warmStrategyCache object line 24'),
+  {
+    urls: ['/index.html', '/'],
+    strategy: pageCache,
+  });
 
 registerRoute(({ request }) => request.mode === 'navigate', pageCache);
 
 // TODO: Implement asset caching
-registerRoute();
+registerRoute(
+  warmStrategyCache,
+  console.log("warmStrategyCache is running (line 33)"),
+  new offlineFallback({
+    statuses: [0, 200]
+  }),
+  console.log('offlineFallback running line 37'),
+);
