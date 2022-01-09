@@ -23,7 +23,7 @@ const pageCache = new CacheFirst(
   });
 
 warmStrategyCache(
-  console.log('Hitting warmStrategyCache object line 24'),
+  console.log('Hitting warmStrategyCache object line 26'),
   {
     urls: ['/index.html', '/'],
     strategy: pageCache,
@@ -34,9 +34,9 @@ registerRoute(({ request }) => request.mode === 'navigate', pageCache);
 // TODO: Implement asset caching
 registerRoute(
   warmStrategyCache,
-  console.log("warmStrategyCache is running (line 33)"),
+  console.log("warmStrategyCache is running (line 37)"),
   new offlineFallback({
     statuses: [0, 200]
   }),
-  console.log('offlineFallback running line 37'),
+  console.log('offlineFallback running line 41'),
 );
